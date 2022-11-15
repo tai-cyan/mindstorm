@@ -39,9 +39,10 @@ void stop(){
 }
 
 void run_task(intptr_t unused) {
+  char str[20];
   while(1){
     colorid_t now_color = ev3_color_sensor_get_color(color_sensor);
-    
+    sprintf(str,"color -> %s",now_color)
     ev3_lcd_draw_string(now_color, 0, 0);
     tslp_tsk(pen_time);
     }
