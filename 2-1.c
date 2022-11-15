@@ -28,8 +28,8 @@ void pen(bool move){
   tslp_tsk(pen_time);
 }
 
-void go(int p,int s,uint32_t t){
-  ev3_motor_steer(L_motor,R_motor,p,s); //モータ操作
+void go(int power,int steer,uint32_t t){
+  ev3_motor_steer(L_motor,R_motor,power,steer); //モータ操作
   tslp_tsk(t);
 }
 
