@@ -12,8 +12,11 @@
 #define L_motor EV3_PORT_A
 #define R_motor EV3_PORT_B
 #define PEN_motor EV3_PORT_C
+#define color_sensor EV3_PORT_2
+
 
 #define gyro_sensor EV3_PORT_3
+#define ultraSonic_sensor EV3_PORT_1
 
 const uint32_t pen_time = 200;
 const uint32_t curve_time = 1500;
@@ -40,46 +43,34 @@ void stop(){
 
 
 void run_task(intptr_t unused) {
-	static int16_t now_val;
+int16_t now_val_1=0;
+char str[20];
 
-	for(int i=0;i<5;i++){
-	
-	pen(true);
-    go(-20,0,1700);
+  while(true){
+    colorid_t now_color = ev3_color_sensor_get_color(color_sensor);
+    if(now_color==COLOR_BLACK)break;
+    ev3_motor_rotate(L_motor,90,20,false);
+	  ev3_motor_rotate(R_motor,90,20,false);
+    tslp_tsk(100);
+  }
+  stop();
+  ev3_motor_rotate(L_motor,-120,20,false);
+	ev3_motor_rotate(R_motor,-120,20,false);
+  tslp_tsk(500);
+  stop();
 
-	    
-	stop();
-	pen(false);
-	ev3_motor_rotate(L_motor,220,20,false);
-	ev3_motor_rotate(R_motor,220,20,false);
-	tslp_tsk(curve_time);
-	stop();
-	ev3_gyro_sensor_reset(gyro_sensor);
-	
-	// curve
-	while(1){
-		go(20,100,100);
-		now_val = ev3_gyro_sensor_get_angle(gyro_sensor);
-	
-		if(now_val>130){
-			stop();
-			break;
-		}
-	}
-	ev3_motor_rotate(L_motor,-270,20,false);
-	ev3_motor_rotate(R_motor,-270,20,false);
-	tslp_tsk(curve_time);
-	stop();
+	now_val_1=(int)ev3_ultrasonic_sensor_get_distance(ultraSonic_sensor);
+	sprintf(str,"distance:%4d",now_val_1);
+	ev3_lcd_draw_string(str,0,0);
 
-	}
 }
 
 void main_task(intptr_t unused) {
   ev3_motor_config(L_motor, LARGE_MOTOR);
   ev3_motor_config(R_motor, LARGE_MOTOR); 
   ev3_motor_config(PEN_motor, MEDIUM_MOTOR);
-  ev3_sensor_config(gyro_sensor, gyro_sensor);
-  
+  ev3_sensor_config(ultraSonic_sensor,ULTRASONIC_SENSOR);
+  ev3_sensor_config(color_sensor, COLOR_SENSOR);
   act_tsk(RUN_TASK);
 }
 
