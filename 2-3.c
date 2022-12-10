@@ -47,55 +47,53 @@ char str[20];
 
 
 while(1){
-    ev3_motor_rotate(L_motor,90,20,false);
-	ev3_motor_rotate(R_motor,90,20,false);
-    tslp_tsk(100);
+  ev3_motor_rotate(L_motor,90,20,false);
+  ev3_motor_rotate(R_motor,90,20,false);
+  tslp_tsk(100);
 
-	now_val_1=(int)ev3_ultrasonic_sensor_get_distance(ultraSonic_sensor);
+  now_val_1=(int)ev3_ultrasonic_sensor_get_distance(ultraSonic_sensor);
 
-	if(now_val_1==0){
-	  continue;
-	}else if(now_val_1<=13){
-	ev3_led_set_color(LED_RED);
-	break;
-	}
+  if(now_val_1==0){
+    continue;
+  }else if(now_val_1<=13){
+  ev3_led_set_color(LED_RED);
+  break;
+  }
 
   }
 
 now_val_1=(int)ev3_ultrasonic_sensor_get_distance(ultraSonic_sensor);
-	sprintf(str,"distance:%4d",now_val_1);
-	ev3_lcd_draw_string(str,0,0);
+  sprintf(str,"distance:%4d",now_val_1);
+  ev3_lcd_draw_string(str,0,0);
 
 
 for(int i=0;i<3;i++){
-	pen(true);
-    go(-20,0,1000);
-
-	    
-	stop();
-	pen(false);
-	ev3_motor_rotate(L_motor,220,20,false);
-	ev3_motor_rotate(R_motor,220,20,false);
-	tslp_tsk(curve_time);
-	stop();
-	ev3_gyro_sensor_reset(gyro_sensor);
+  pen(true);
+  go(-20,0,1000);
+    
+  stop();
+  pen(false);
+  ev3_motor_rotate(L_motor,220,20,false);
+  ev3_motor_rotate(R_motor,220,20,false);
+  tslp_tsk(curve_time);
+  stop();
+  ev3_gyro_sensor_reset(gyro_sensor);
 	
-	// curve
-	while(1){
-		go(20,100,100);
-		now_val_2 = ev3_gyro_sensor_get_angle(gyro_sensor);
-	
-		if(now_val_2>120){
-			stop();
-			break;
-		}
-	}
-	ev3_motor_rotate(L_motor,-270,20,false);
-	ev3_motor_rotate(R_motor,-270,20,false);
-	tslp_tsk(curve_time);
-	stop();
+  // curve
+  while(1){
+  	go(20,100,100);
+  	now_val_2 = ev3_gyro_sensor_get_angle(gyro_sensor);
+  
+  	if(now_val_2>120){
+  		stop();
+  		break;
+  	}
+  }
+  ev3_motor_rotate(L_motor,-270,20,false);
+  ev3_motor_rotate(R_motor,-270,20,false);
+  tslp_tsk(curve_time);
+  stop();
 }
-
 
 }
 
@@ -105,7 +103,6 @@ void main_task(intptr_t unused) {
   ev3_motor_config(PEN_motor, MEDIUM_MOTOR);
   ev3_sensor_config(gyro_sensor, gyro_sensor);
   ev3_sensor_config(ultraSonic_sensor,ULTRASONIC_SENSOR);
-  
 
   act_tsk(RUN_TASK);
 }

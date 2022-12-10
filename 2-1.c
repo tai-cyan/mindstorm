@@ -40,13 +40,11 @@ void stop(){
 
 
 void run_task(intptr_t unused) {
-	static int16_t now_val;
+  static int16_t now_val;
 
-	for(int i=0;i<5;i++){
-	
-	pen(true);
+  for(int i=0;i<5;i++){
+    pen(true);
     go(-20,0,1700);
-
 	    
 	stop();
 	pen(false);
